@@ -1,0 +1,143 @@
+.project-edit-page {
+  padding: 36px 40px;
+  max-width: 780px;
+}
+
+/* ── Breadcrumb ────────────────────────────────────────── */
+.project-edit-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.project-edit-breadcrumb a {
+  color: var(--text-muted);
+}
+
+.project-edit-breadcrumb a:hover {
+  color: var(--primary);
+}
+
+.project-edit-breadcrumb .breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+.project-edit-page h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.project-edit-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+}
+
+/* ── Form ──────────────────────────────────────────────── */
+.project-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.project-edit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.project-edit-section h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.project-edit-section textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* ── Member list ───────────────────────────────────────── */
+.project-edit-member-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.project-edit-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.project-edit-member-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.project-edit-member-name {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.project-edit-member-remove {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--red, #ef4444);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.project-edit-member-remove:hover {
+  background: var(--red, #ef4444);
+  color: var(--white);
+  border-color: var(--red, #ef4444);
+}
+
+.project-edit-empty {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ── Actions ───────────────────────────────────────────── */
+.project-edit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.project-edit-saved-msg {
+  font-size: 0.85rem;
+  color: var(--green);
+  font-weight: 500;
+  margin-right: auto;
+}
+
+/* ── Forbidden / not found ─────────────────────────────── */
+.project-edit-forbidden,
+.project-edit-not-found {
+  padding: 36px 40px;
+  color: var(--text-muted);
+}

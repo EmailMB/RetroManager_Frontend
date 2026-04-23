@@ -1,0 +1,328 @@
+.project-detail-page {
+  padding: 36px 40px;
+  max-width: 1000px;
+}
+
+.project-detail-not-found {
+  padding: 40px;
+  color: var(--text-muted);
+}
+
+/* ── Breadcrumb ────────────────────────────────────────── */
+.project-detail-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.project-detail-breadcrumb a {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.project-detail-breadcrumb a:hover {
+  color: var(--primary);
+}
+
+.project-detail-breadcrumb a::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: middle;
+}
+
+.breadcrumb-sep {
+  color: var(--border);
+  font-size: 1rem;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+.project-detail-header {
+  margin-bottom: 28px;
+}
+
+.project-detail-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.project-detail-title-row h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.project-detail-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.project-detail-settings-btn {
+  padding: 8px 10px;
+}
+
+.project-detail-desc {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  max-width: 600px;
+}
+
+.project-detail-team {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.project-detail-team-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.project-detail-members {
+  display: flex;
+  align-items: center;
+}
+
+.project-detail-members .avatar {
+  margin-right: -5px;
+}
+
+.project-detail-members-more {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-left: 10px;
+}
+
+/* ── Stats ─────────────────────────────────────────────── */
+.project-detail-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stat-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-card-icon.blue   { background: var(--blue-bg);   color: var(--blue); }
+.stat-card-icon.purple { background: var(--primary-light); color: var(--primary); }
+.stat-card-icon.green  { background: var(--green-bg);  color: var(--green); }
+.stat-card-icon.orange { background: var(--orange-bg); color: var(--orange); }
+
+.stat-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-card-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stat-card-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.stat-card-value.orange { color: var(--orange); }
+
+/* ── History ───────────────────────────────────────────── */
+.project-detail-history {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.project-detail-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.project-detail-history-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.project-detail-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.project-detail-tab {
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--white);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.project-detail-tab:hover {
+  background: var(--gray-bg);
+}
+
+.project-detail-tab.active {
+  background: var(--white);
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.project-detail-empty {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  padding: 20px 0;
+}
+
+/* ── Retro list ────────────────────────────────────────── */
+.retro-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.retro-list-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.retro-list-item:last-child {
+  border-bottom: none;
+}
+
+.retro-list-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.retro-list-item-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.retro-badge-recent {
+  font-size: 0.65rem !important;
+  padding: 2px 7px !important;
+}
+
+.retro-list-item-date {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.retro-list-item-counts {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.retro-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.retro-count-positive { color: var(--green); }
+.retro-count-pending  { color: var(--orange); }
+
+/* ── Progress bar ──────────────────────────────────────── */
+.retro-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+}
+
+.retro-progress-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.retro-progress-label.done {
+  color: var(--green);
+}
+
+.retro-progress-bar-wrap {
+  width: 100%;
+  height: 5px;
+  background: var(--gray-bg);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.retro-progress-bar {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+
+.retro-progress-bar.done {
+  background: var(--green);
+}
+
+.retro-progress-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  align-self: flex-end;
+}
+
+.retro-list-open-btn {
+  white-space: nowrap;
+  font-size: 0.82rem;
+  padding: 7px 14px;
+}

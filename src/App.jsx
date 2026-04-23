@@ -1,76 +1,38 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider, useAuth } from './context/AuthContext'
-import NavBar from './components/NavBar'
+import { AuthProvider } from './context/AuthContext'
+import Sidebar from './components/Sidebar'
+import './App.css'
 
-// Temporary placeholder rendered for routes not yet implemented.
-// Will be replaced page by page in subsequent blocks.
-function UnderConstruction({ name }) {
-    return <div style={{ padding: 24 }}><h2>{name} — Under construction</h2></div>
-}
+import LoginPage               from './pages/LoginPage'
+import RegisterPage            from './pages/RegisterPage'
+import OverviewPage            from './pages/OverviewPage'
+import ProjectsPage            from './pages/ProjectsPage'
+import ProjectDetailPage       from './pages/ProjectDetailPage'
+import ProjectEditPage         from './pages/ProjectEditPage'
+import NewProjectPage          from './pages/NewProjectPage'
+import NewRetrospectivePage    from './pages/NewRetrospectivePage'
+import RetrospectiveBoardPage  from './pages/RetrospectiveBoardPage'
+import ProfilePage             from './pages/ProfilePage'
 
-function ProtectedRoute({ children }) {
-    const { token } = useAuth()
-    return token ? children : <Navigate to="/login" replace />
-}
-
-function AppRoutes() {
-    return (
-        <>
-            <NavBar />
-            <main>
-                <Routes>
-                    {/* Public */}
-                    <Route path="/login" element={<UnderConstruction name="Login" />} />
-
-                    {/* Default redirect */}
-                    <Route path="/" element={<Navigate to="/projects" replace />} />
-
-                    {/* Projects — placeholder until T4.1 screens */}
-                    <Route path="/projects" element={<ProtectedRoute><UnderConstruction name="Project List" /></ProtectedRoute>} />
-
-                    {/* Retrospectives */}
-                    <Route path="/projects/:projectId/retrospectives"     element={<ProtectedRoute><RetrospectiveListPage /></ProtectedRoute>} />
-                    <Route path="/projects/:projectId/retrospectives/new" element={<ProtectedRoute><NewRetrospectivePage /></ProtectedRoute>} />
-                    <Route path="/retrospectives/:retroId"                element={<ProtectedRoute><RetrospectiveDetailPage /></ProtectedRoute>} />
-                    <Route path="/retrospectives/:retroId/edit"           element={<ProtectedRoute><UnderConstruction name="Edit Retrospective" /></ProtectedRoute>} />
-                </Routes>
-            </main>
-        </>
-    )
-}
-
-// Wraps a route that requires the user to be logged in.
-// Redirects to /login if no token is found in the auth context.
-function ProtectedRoute({ children }) {
-  const { token } = useAuth()
-  return token ? children : <Navigate to="/login" replace />
-}
-
-function AppRoutes() {
+// Layout for authenticated pages: sidebar + content
+function AppLayout() {
   return (
-    <>
-      <NavBar />
-      <main>
+    <div className="app-layout">
+      <Sidebar />
+      <main className="app-main">
         <Routes>
-          {/* Public */}
-          <Route path="/login" element={<UnderConstruction name="Login" />} />
-
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/projects" replace />} />
-
-          {/* Projects */}
-          <Route path="/projects" element={<ProtectedRoute><UnderConstruction name="Project List" /></ProtectedRoute>} />
-
-          {/* Retrospectives (nested under a project) */}
-          <Route path="/projects/:projectId/retrospectives"     element={<ProtectedRoute><UnderConstruction name="Retrospective List" /></ProtectedRoute>} />
-          <Route path="/projects/:projectId/retrospectives/new" element={<ProtectedRoute><UnderConstruction name="New Retrospective" /></ProtectedRoute>} />
-
-          {/* Retrospective detail and edit */}
-            <Route path="/retrospectives/:retroId" element={<ProtectedRoute><UnderConstruction name="Retrospective Detail" /></ProtectedRoute>} />
-          <Route path="/retrospectives/:retroId/edit"  element={<ProtectedRoute><UnderConstruction name="Edit Retrospective" /></ProtectedRoute>} />
+          <Route path="/"                                               element={<Navigate to="/projects" replace />} />
+          <Route path="/overview"                                       element={<OverviewPage />} />
+          <Route path="/projects"                                       element={<ProjectsPage />} />
+          <Route path="/projects/new"                                   element={<NewProjectPage />} />
+          <Route path="/projects/:projectId"                            element={<ProjectDetailPage />} />
+          <Route path="/projects/:projectId/edit"                       element={<ProjectEditPage />} />
+          <Route path="/projects/:projectId/retrospectives/new"        element={<NewRetrospectivePage />} />
+          <Route path="/retrospectives/:retroId"                        element={<RetrospectiveBoardPage />} />
+          <Route path="/profile"                                        element={<ProfilePage />} />
         </Routes>
       </main>
-    </>
+    </div>
   )
 }
 
@@ -78,7 +40,11 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <AppRoutes />
+        <Routes>
+          <Route path="/login"    element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/*"        element={<AppLayout />} />
+        </Routes>
       </BrowserRouter>
     </AuthProvider>
   )

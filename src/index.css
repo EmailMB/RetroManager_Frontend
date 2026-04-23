@@ -5,17 +5,39 @@
 }
 
 :root {
-  --cor-primaria: #4f46e5;
-  --cor-fundo: #f5f5f5;
-  --cor-navbar: #1e1e2e;
-  --cor-texto: #1a1a2e;
-  --raio: 8px;
+  --sidebar-width: 190px;
+  --sidebar-bg: #2d2b6e;
+  --sidebar-active: rgba(255, 255, 255, 0.15);
+  --sidebar-hover: rgba(255, 255, 255, 0.08);
+
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-light: #ede9fe;
+
+  --bg: #f5f6fa;
+  --white: #ffffff;
+  --text: #1a1a2e;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  --green: #16a34a;
+  --green-bg: #dcfce7;
+  --orange: #f97316;
+  --orange-bg: #fff7ed;
+  --blue: #2563eb;
+  --blue-bg: #dbeafe;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --gray: #6b7280;
+  --gray-bg: #f3f4f6;
 }
 
 body {
   font-family: Inter, system-ui, sans-serif;
-  background-color: var(--cor-fundo);
-  color: var(--cor-texto);
+  background-color: var(--bg);
+  color: var(--text);
   min-height: 100vh;
 }
 
@@ -27,4 +49,20 @@ a {
 button {
   font-family: inherit;
   cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+/* ── App layout ───────────────────────────────────────── */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg);
 }

@@ -4,8 +4,8 @@
 // Returns the full retrospective detail.
 // ManagerNotes is null in the response for Normal-role users.
 export async function getRetrospectiveById(retroId) {
-    const response = await api.get(`/retrospectives/${retroId}`)
-    return response.data
+    //const response = await api.get(`/retrospectives/${retroId}`)
+    return re
 }
 
 // POST /api/projects/:projectId/retrospectives

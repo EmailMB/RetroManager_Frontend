@@ -1,31 +1,39 @@
 import { createContext, useContext, useState } from 'react'
+import { MOCK_USER } from '../data/mockData'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  // Rehydrate session from localStorage on first render so the user
-  // stays logged in after a page refresh.
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('user')
-    return saved ? JSON.parse(saved) : null
-  })
-  const [token, setToken] = useState(() => localStorage.getItem('token'))
+  // MOCK MODE: user is pre-set to mock user — no real authentication needed.
+  // When integrating with the backend, replace the initial state below with
+  // the real localStorage rehydration logic (see commented block).
+  const [user, setUser] = useState(MOCK_USER)
+  const [token, setToken] = useState('mock-token')
+
+  // REAL AUTH (uncomment when backend is connected):
+  // const [user, setUser] = useState(() => {
+  //   const saved = localStorage.getItem('user')
+  //   return saved ? JSON.parse(saved) : null
+  // })
+  // const [token, setToken] = useState(() => localStorage.getItem('token'))
 
   // Called after a successful login response from the backend.
   // Stores the JWT and the user object (id, name, email, role as int).
   function login(userData, jwt) {
     setUser(userData)
     setToken(jwt)
-    localStorage.setItem('user', JSON.stringify(userData))
-    localStorage.setItem('token', jwt)
+    // REAL AUTH: uncomment when backend is connected:
+    // localStorage.setItem('user', JSON.stringify(userData))
+    // localStorage.setItem('token', jwt)
   }
 
   // Clears all session data — called on logout or on 401 response.
   function logout() {
     setUser(null)
     setToken(null)
-    localStorage.removeItem('user')
-    localStorage.removeItem('token')
+    // REAL AUTH: uncomment when backend is connected:
+    // localStorage.removeItem('user')
+    // localStorage.removeItem('token')
   }
 
   // Convenience flags derived from the numeric role value.

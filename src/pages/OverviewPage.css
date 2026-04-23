@@ -1,0 +1,195 @@
+.overview-page {
+  padding: 36px 40px;
+  max-width: 1000px;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+.overview-header {
+  margin-bottom: 28px;
+}
+
+.overview-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.overview-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* ── Stats ─────────────────────────────────────────────── */
+.overview-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.overview-stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.overview-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.overview-stat-icon.blue   { background: var(--blue-bg);      color: var(--blue); }
+.overview-stat-icon.purple { background: var(--primary-light); color: var(--primary); }
+.overview-stat-icon.green  { background: var(--green-bg);      color: var(--green); }
+.overview-stat-icon.orange { background: var(--orange-bg);     color: var(--orange); }
+
+.overview-stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.overview-stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+}
+
+.overview-stat-value.orange { color: var(--orange); }
+
+.overview-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ── Sections ──────────────────────────────────────────── */
+.overview-section {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+
+.overview-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.overview-section-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* ── Projects list ─────────────────────────────────────── */
+.overview-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.overview-project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+  border-radius: var(--radius-sm);
+  margin: 0 -4px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.overview-project-item:last-child {
+  border-bottom: none;
+}
+
+.overview-project-item:hover {
+  background: var(--bg);
+}
+
+.overview-project-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.overview-project-left > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.overview-project-left strong {
+  font-size: 0.875rem;
+}
+
+.overview-project-sessions {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.overview-project-pending {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--orange);
+}
+
+.overview-project-pending.done {
+  color: var(--green);
+}
+
+/* ── Retros list ───────────────────────────────────────── */
+.overview-retros {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.overview-retro-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background 0.1s;
+}
+
+.overview-retro-item:last-child {
+  border-bottom: none;
+}
+
+.overview-retro-item:hover {
+  background: var(--bg);
+}
+
+.overview-retro-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.overview-retro-item strong {
+  font-size: 0.875rem;
+}
+
+.overview-retro-project {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}

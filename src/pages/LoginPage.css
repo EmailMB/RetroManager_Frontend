@@ -1,0 +1,113 @@
+.login-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Left panel ────────────────────────────────────────── */
+.login-left {
+  width: 380px;
+  flex-shrink: 0;
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  color: white;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: auto;
+}
+
+.login-brand-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.login-left-content {
+  padding-bottom: 80px;
+}
+
+.login-left-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.login-left-content p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+}
+
+/* ── Right panel ───────────────────────────────────────── */
+.login-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 40px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+}
+
+.login-box h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.login-box-subtitle {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 28px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-submit-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 11px;
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.login-register-link {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+
+.login-register-link a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.login-register-link a:hover {
+  text-decoration: underline;
+}

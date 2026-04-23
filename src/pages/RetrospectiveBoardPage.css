@@ -1,0 +1,400 @@
+.board-page {
+  padding: 28px 32px;
+  height: 100%;
+}
+
+.board-not-found {
+  padding: 40px;
+  color: var(--text-muted);
+}
+
+/* ── Breadcrumb ────────────────────────────────────────── */
+.board-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.board-project-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+}
+
+.board-status-dot {
+  color: var(--green);
+  font-size: 0.9rem;
+}
+
+.board-retro-status {
+  font-size: 0.72rem;
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+.board-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.board-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.board-back-btn:hover {
+  background: var(--gray-bg);
+}
+
+.board-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* ── Columns ───────────────────────────────────────────── */
+.board-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.board-column {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.board-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-top: 3px solid transparent;
+}
+
+.board-column-header.col-green  { border-top-color: #22c55e; background: #f0fdf4; }
+.board-column-header.col-orange { border-top-color: #f97316; background: #fff7ed; }
+.board-column-header.col-blue   { border-top-color: var(--blue); background: #eff6ff; }
+
+.board-column-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.board-column-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.board-column-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Cards ─────────────────────────────────────────────── */
+.board-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+
+.board-card-text {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.board-card-vote {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  transition: color 0.15s;
+}
+
+.board-card-vote:hover {
+  color: var(--primary);
+}
+
+.board-card:not(.board-card-action) {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Action card ───────────────────────────────────────── */
+.board-card-action .board-card-text {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.board-card-action-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.board-card-assignee {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.board-card-assignee-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ── Add button ────────────────────────────────────────── */
+.board-add-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  text-align: center;
+}
+
+.board-add-btn:hover {
+  background: var(--gray-bg);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ── Add form ──────────────────────────────────────────── */
+.board-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.board-add-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: none;
+  color: var(--text);
+}
+
+.board-add-form textarea:focus {
+  outline: none;
+}
+
+.board-add-form-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.board-add-form-actions .btn,
+.board-add-form-actions .btn-primary {
+  padding: 7px 14px;
+  font-size: 0.8rem;
+}
+
+/* ── Manager Notes ─────────────────────────────────────── */
+.board-notes-section {
+  margin-top: 28px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+}
+
+.board-notes-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.board-notes-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.board-notes-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.board-notes-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: var(--text);
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.board-notes-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.board-notes-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.board-notes-saved {
+  font-size: 0.82rem;
+  color: var(--green);
+  font-weight: 500;
+}
+
+/* ── Attendance (manager only) ────────────────────────── */
+.board-attendance-section {
+  margin-top: 28px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+}
+
+.board-attendance-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.board-attendance-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.board-attendance-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.board-attendance-quick {
+  display: flex;
+  gap: 8px;
+}
+
+.board-attendance-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+}
+
+.board-attendance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.board-attendance-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+
+.board-attendance-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.board-attendance-name {
+  font-size: 0.88rem;
+  color: var(--text);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-attendance-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.board-attendance-count {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.board-attendance-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

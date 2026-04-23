@@ -1,0 +1,184 @@
+.new-project-page {
+  padding: 36px 40px;
+  max-width: 780px;
+}
+
+/* ── Breadcrumb ────────────────────────────────────────── */
+.new-project-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.new-project-breadcrumb a {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.new-project-breadcrumb a:hover {
+  color: var(--primary);
+}
+
+.new-project-page h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.new-project-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+}
+
+/* ── Form ──────────────────────────────────────────────── */
+.new-project-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.new-project-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.new-project-section h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.new-project-section textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* ── Member search ─────────────────────────────────────── */
+.member-search-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.member-search-input-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.member-search-input-wrap svg {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+}
+
+.member-search-input-wrap input {
+  width: 100%;
+  padding: 9px 14px 9px 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  background: var(--white);
+  color: var(--text);
+}
+
+.member-search-input-wrap input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.member-search-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 60px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.member-search-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.member-search-result:hover {
+  background: var(--gray-bg);
+}
+
+/* ── Member chips ──────────────────────────────────────── */
+.member-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.member-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+.member-chip-remove {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0 0 2px;
+  transition: color 0.15s;
+}
+
+.member-chip-remove:hover {
+  color: var(--red);
+}
+
+/* ── Settings grid ─────────────────────────────────────── */
+.new-project-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Form actions ──────────────────────────────────────── */
+.new-project-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
+}

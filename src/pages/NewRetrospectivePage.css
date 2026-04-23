@@ -1,0 +1,79 @@
+.new-retro-page {
+  padding: 36px 40px;
+  max-width: 700px;
+}
+
+/* ── Breadcrumb ────────────────────────────────────────── */
+.new-retro-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.new-retro-breadcrumb a {
+  color: var(--text-muted);
+}
+
+.new-retro-breadcrumb a:hover {
+  color: var(--primary);
+}
+
+.new-retro-page h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.new-retro-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+}
+
+/* ── Form ──────────────────────────────────────────────── */
+.new-retro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.new-retro-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.new-retro-section h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2px;
+}
+
+/* ── Date + time row ───────────────────────────────────── */
+.new-retro-date-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Actions ───────────────────────────────────────────── */
+.new-retro-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.new-retro-draft-btn {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.new-retro-draft-btn:hover {
+  background: var(--primary-light);
+}
