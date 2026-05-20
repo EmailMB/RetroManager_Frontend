@@ -1,52 +1,55 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { getProjectById } from '../data/mockData'
+import { getProjectById } from '../services/projectService'
+import { createRetrospective } from '../services/retrospectiveService'
+import { getAccessibleTemplates } from '../services/retroTemplateService'
 import './NewRetrospectivePage.css'
 
 export default function NewRetrospectivePage() {
   const { projectId } = useParams()
   const navigate = useNavigate()
 
-  const project = getProjectById(projectId)
+  const [project, setProject]     = useState(null)
+  const [templates, setTemplates] = useState([])
 
   const [form, setForm] = useState({
     title: '',
     date: '',
     time: '',
+    templateId: '',
   })
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    getProjectById(projectId).then(setProject).catch(() => {})
+    getAccessibleTemplates().then(setTemplates).catch(() => {})
+  }, [projectId])
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setSubmitting(true)
-    // MOCK: simulate creation and navigate back
-    setTimeout(() => {
-      navigate(`/projects/${projectId}`)
-    }, 400)
-    // REAL: uncomment when backend is connected:
-    // try {
-    //   const retro = await createRetrospective(projectId, {
-    //     title: form.title,
-    //     date: new Date(`${form.date}T${form.time || '09:00'}`).toISOString(),
-    //   })
-    //   navigate(`/retrospectives/${retro.id}`)
-    // } catch { setError('Erro ao criar retrospectiva.') }
-    // finally { setSubmitting(false) }
-  }
+    setError(null)
 
-  function handleSaveDraft(e) {
-    e.preventDefault()
-    // MOCK: save draft — navigate back for now
-    navigate(`/projects/${projectId}`)
+    try {
+      const retro = await createRetrospective(projectId, {
+        title: form.title,
+        date: new Date(`${form.date}T${form.time || '09:00'}`).toISOString(),
+        templateId: form.templateId ? Number(form.templateId) : null,
+      })
+      navigate(`/retrospectives/${retro.id}`)
+    } catch {
+      setError('Erro ao criar retrospectiva.')
+      setSubmitting(false)
+    }
   }
 
   return (
     <div className="new-retro-page">
-      {/* ── Breadcrumb ──────────────────────────────────────── */}
       <div className="new-retro-breadcrumb">
         <Link to="/projects">Projetos</Link>
         <span>›</span>
@@ -68,18 +71,16 @@ export default function NewRetrospectivePage() {
         <div className="page-card new-retro-section">
           <h2>Detalhes da Sessão</h2>
 
-          {/* Projeto Associado (read-only) */}
           <div className="form-field">
             <label>Projeto Associado</label>
             <input
               type="text"
-              value={project?.name ?? ''}
+              value={project?.name ?? 'A carregar...'}
               readOnly
               disabled
             />
           </div>
 
-          {/* Título */}
           <div className="form-field">
             <label>Título da Retrospectiva</label>
             <input
@@ -92,7 +93,25 @@ export default function NewRetrospectivePage() {
             />
           </div>
 
-          {/* Date + Time row */}
+          <div className="form-field">
+            <label>Template (opcional)</label>
+            <select
+              name="templateId"
+              value={form.templateId}
+              onChange={handleChange}
+            >
+              <option value="">Sem template — começar do zero</option>
+              {templates.map(t => (
+                <option key={t.id} value={t.id}>
+                  {t.name} ({t.columns.length} colunas){t.isGlobal ? ' · Global' : ''}
+                </option>
+              ))}
+            </select>
+            <small style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: 4 }}>
+              As colunas do template serão criadas automaticamente.
+            </small>
+          </div>
+
           <div className="new-retro-date-row">
             <div className="form-field">
               <label>Data Agendada</label>
@@ -116,13 +135,11 @@ export default function NewRetrospectivePage() {
           </div>
         </div>
 
-        {/* ── Actions ─────────────────────────────────────── */}
+        {error && <p className="error-msg">{error}</p>}
+
         <div className="new-retro-actions">
           <button type="button" className="btn" onClick={() => navigate(`/projects/${projectId}`)}>
             Cancelar
-          </button>
-          <button type="button" className="btn new-retro-draft-btn" onClick={handleSaveDraft}>
-            Guardar Rascunho
           </button>
           <button type="submit" className="btn-primary" disabled={submitting}>
             {submitting ? 'A criar...' : 'Criar Retrospectiva →'}

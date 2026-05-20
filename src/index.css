@@ -55,7 +55,7 @@ input, textarea, select {
   font-family: inherit;
 }
 
-/* ── App layout ───────────────────────────────────────── */
+/* App layout */
 .app-layout {
   display: flex;
   min-height: 100vh;

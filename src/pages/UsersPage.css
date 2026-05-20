@@ -1,0 +1,249 @@
+.users-page {
+  padding: 36px 40px;
+  max-width: 1100px;
+}
+
+/* Header */
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.users-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.users-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Stats row */
+.users-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.users-stat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.users-stat-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.users-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Filters */
+.users-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.users-search {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+}
+
+.users-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.users-search input {
+  width: 100%;
+  padding: 9px 14px 9px 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--white);
+}
+
+.users-search input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.users-filters select {
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--white);
+  cursor: pointer;
+}
+
+.users-filters select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Table */
+.users-table-wrapper {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th {
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--bg);
+}
+
+.users-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+.users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.users-table tbody tr:hover {
+  background: var(--bg);
+}
+
+.users-row-self {
+  background: #faf5ff;
+}
+
+.users-row-self:hover {
+  background: #f3e8ff !important;
+}
+
+/* User cell */
+.users-cell-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.users-cell-name {
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.users-you-tag {
+  font-weight: 500;
+  color: var(--primary);
+  font-size: 0.78rem;
+}
+
+.users-cell-email {
+  color: var(--text-muted);
+}
+
+/* Audit cell */
+.users-cell-audit {
+  white-space: nowrap;
+}
+
+.users-audit-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.users-audit-by {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.users-audit-date {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.users-audit-none {
+  color: var(--text-muted);
+}
+
+/* Role select */
+.users-role-select {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--white);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.users-role-select:hover {
+  border-color: var(--primary);
+}
+
+.users-role-select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.users-role-select:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.users-self-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Empty state */
+.users-table-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 32px 16px !important;
+  font-size: 0.88rem;
+}

@@ -3,7 +3,7 @@
   min-height: 100vh;
 }
 
-/* ── Left panel ────────────────────────────────────────── */
+/* Left panel */
 .register-left {
   width: 380px;
   flex-shrink: 0;
@@ -51,7 +51,7 @@
   line-height: 1.6;
 }
 
-/* ── Right panel ───────────────────────────────────────── */
+/* Right panel */
 .register-right {
   flex: 1;
   display: flex;

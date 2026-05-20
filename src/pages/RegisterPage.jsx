@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import { MOCK_USER } from '../data/mockData'
+import { register as registerService } from '../services/authService'
 import './RegisterPage.css'
 
 export default function RegisterPage() {
-  const { login } = useAuth()
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
@@ -16,6 +14,7 @@ export default function RegisterPage() {
   })
   const [error, setError]     = useState(null)
   const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -32,23 +31,19 @@ export default function RegisterPage() {
 
     setLoading(true)
 
-    // MOCK: accept any input and log in as mock user
-    await new Promise(r => setTimeout(r, 400))
-    login({ ...MOCK_USER, name: form.name || MOCK_USER.name }, 'mock-token')
-    navigate('/projects')
-
-    // REAL: uncomment when backend is connected:
-    // try {
-    //   const result = await registerService(form.name, form.email, form.password)
-    //   login(result, result.token)
-    //   navigate('/projects')
-    // } catch {
-    //   setError('Erro ao criar conta. Tenta novamente.')
-    // } finally {
-    //   setLoading(false)
-    // }
-
-    setLoading(false)
+    try {
+      const result = await registerService(form.name, form.email, form.password)
+      if (result?.emailVerified) {
+        navigate('/login')
+      } else {
+        setSuccess(true)
+      }
+    } catch (err) {
+      const msg = err.response?.data ?? 'Erro ao criar conta. Tenta novamente.'
+      setError(typeof msg === 'string' ? msg : 'Erro ao criar conta. Tenta novamente.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -66,6 +61,19 @@ export default function RegisterPage() {
 
       <div className="register-right">
         <div className="register-box">
+          {success ? (
+            <>
+              <h1>Verifica o teu email</h1>
+              <p className="register-box-subtitle">
+                Enviámos um link de confirmação para <strong>{form.email}</strong>.
+                Clica no link no email para ativar a conta.
+              </p>
+              <Link to="/login" className="btn-primary register-submit-btn" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+                Voltar ao Login
+              </Link>
+            </>
+          ) : (
+          <>
           <h1>Criar Conta</h1>
           <p className="register-box-subtitle">Preenche os dados para começar</p>
 
@@ -130,6 +138,8 @@ export default function RegisterPage() {
           <p className="register-login-link">
             Já tens conta? <Link to="/login">Iniciar sessão</Link>
           </p>
+          </>
+          )}
         </div>
       </div>
     </div>

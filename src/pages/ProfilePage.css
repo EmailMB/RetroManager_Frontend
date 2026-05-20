@@ -3,7 +3,7 @@
   max-width: 700px;
 }
 
-/* ── Header ────────────────────────────────────────────── */
+/* Header */
 .profile-header {
   margin-bottom: 28px;
 }
@@ -19,7 +19,7 @@
   margin-top: 4px;
 }
 
-/* ── Identity card ─────────────────────────────────────── */
+/* Identity card */
 .profile-identity {
   display: flex;
   align-items: center;
@@ -62,7 +62,7 @@
   align-self: flex-start;
 }
 
-/* ── Sections ──────────────────────────────────────────── */
+/* Sections */
 .profile-section {
   margin-bottom: 20px;
   display: flex;
@@ -84,7 +84,7 @@
   margin: -4px 0 0;
 }
 
-/* ── Form grid ─────────────────────────────────────────── */
+/* Form grid */
 .profile-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -97,7 +97,7 @@
   gap: 16px;
 }
 
-/* ── Actions ───────────────────────────────────────────── */
+/* Actions */
 .profile-form-actions {
   display: flex;
   align-items: center;

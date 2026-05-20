@@ -10,7 +10,7 @@
   height: 100vh;
 }
 
-/* ── Logo ──────────────────────────────────────────────── */
+/* Logo */
 .sidebar-logo {
   display: flex;
   align-items: center;
@@ -35,7 +35,7 @@
   flex-shrink: 0;
 }
 
-/* ── Nav ───────────────────────────────────────────────── */
+/* Nav */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -67,12 +67,18 @@
   color: white;
 }
 
-/* ── User ──────────────────────────────────────────────── */
+.sidebar-nav-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 8px 12px;
+}
+
+/* User */
 .sidebar-user {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 14px;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin-top: auto;
 }
@@ -81,11 +87,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  flex: 1;
   min-width: 0;
   text-decoration: none;
   border-radius: var(--radius-sm);
-  padding: 4px;
+  padding: 6px;
   transition: background 0.15s;
 }
 
@@ -109,32 +114,43 @@
 .sidebar-user-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   overflow: hidden;
 }
 
 .sidebar-user-name {
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.sidebar-user-email {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .sidebar-user-logout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   cursor: pointer;
-  padding: 2px;
-  text-align: left;
-  transition: color 0.15s;
-  white-space: nowrap;
-  flex-shrink: 0;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, color 0.15s;
 }
 
 .sidebar-user-logout:hover {
+  background: var(--sidebar-hover);
   color: rgba(255, 255, 255, 0.85);
 }

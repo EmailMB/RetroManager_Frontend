@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { MOCK_USER } from '../data/mockData'
+import { login as loginService } from '../services/authService'
 import './LoginPage.css'
 
 export default function LoginPage() {
@@ -21,23 +21,19 @@ export default function LoginPage() {
     setLoading(true)
     setError(null)
 
-    // MOCK: accept any credentials and log in as mock user
-    await new Promise(r => setTimeout(r, 400))
-    login(MOCK_USER, 'mock-token')
-    navigate('/projects')
-
-    // REAL: uncomment when backend is connected:
-    // try {
-    //   const result = await loginService(form.email, form.password)
-    //   login(result, result.token)
-    //   navigate('/projects')
-    // } catch {
-    //   setError('Email ou palavra-passe incorretos.')
-    // } finally {
-    //   setLoading(false)
-    // }
-
-    setLoading(false)
+    try {
+      const data = await loginService(form.email, form.password)
+      login({ id: data.id, name: data.name, email: data.email, role: data.role }, data.token)
+      navigate('/projects')
+    } catch (err) {
+      const data = err.response?.data
+      let msg = 'Email ou palavra-passe incorretos.'
+      if (typeof data === 'string') msg = data
+      else if (data?.message) msg = data.message
+      setError(msg)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

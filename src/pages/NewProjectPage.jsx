@@ -1,7 +1,19 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { MOCK_MEMBERS } from '../data/mockData'
+import { createProject, addProjectMember } from '../services/projectService'
+import { searchUsers } from '../services/userService'
 import './NewProjectPage.css'
+
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+}
+
+function stringToColor(str) {
+  const colors = ['#14b8a6','#f97316','#ec4899','#8b5cf6','#4f46e5','#ef4444','#22c55e','#0ea5e9','#a855f7']
+  let hash = 0
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash)
+  return colors[Math.abs(hash) % colors.length]
+}
 
 export default function NewProjectPage() {
   const navigate = useNavigate()
@@ -9,51 +21,67 @@ export default function NewProjectPage() {
   const [form, setForm] = useState({
     name: '',
     description: '',
-    startDate: '',
-    status: 'Ativo',
   })
-  const [members, setMembers] = useState([MOCK_MEMBERS[4]]) // Ema Botelho pre-added
+  const [members, setMembers] = useState([])
   const [memberSearch, setMemberSearch] = useState('')
+  const [searchResults, setSearchResults] = useState([])
   const [submitting, setSubmitting] = useState(false)
-
-  const searchResults = memberSearch.trim()
-    ? MOCK_MEMBERS.filter(m =>
-        !members.find(sel => sel.id === m.id) &&
-        m.name.toLowerCase().includes(memberSearch.toLowerCase())
-      )
-    : []
+  const [error, setError] = useState(null)
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  function addMember(member) {
-    setMembers(prev => [...prev, member])
+  async function handleMemberSearch(query) {
+    setMemberSearch(query)
+    if (query.trim().length < 2) {
+      setSearchResults([])
+      return
+    }
+    try {
+      const results = await searchUsers(query.trim())
+      setSearchResults(results.filter(u => !members.find(m => m.userId === u.userId)))
+    } catch {
+      setSearchResults([])
+    }
+  }
+
+  function addMember(user) {
+    setMembers(prev => [...prev, user])
     setMemberSearch('')
+    setSearchResults([])
   }
 
-  function removeMember(id) {
-    setMembers(prev => prev.filter(m => m.id !== id))
+  function removeMember(userId) {
+    setMembers(prev => prev.filter(m => m.userId !== userId))
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setSubmitting(true)
-    // MOCK: simulate async creation
-    setTimeout(() => {
-      navigate('/projects')
-    }, 400)
-    // REAL: uncomment when backend is connected:
-    // try {
-    //   const project = await createProject({ ...form, memberIds: members.map(m => m.id) })
-    //   navigate(`/projects/${project.id}`)
-    // } catch { setError('Erro ao criar projeto.') }
-    // finally { setSubmitting(false) }
+    setError(null)
+
+    try {
+      const project = await createProject({
+        name: form.name,
+        description: form.description,
+      })
+
+      for (const member of members) {
+        try {
+          await addProjectMember(project.id, member.userId)
+        } catch { /* ignore */ }
+      }
+
+      navigate(`/projects/${project.id}`)
+    } catch {
+      setError('Erro ao criar projeto.')
+      setSubmitting(false)
+    }
   }
 
   return (
     <div className="new-project-page">
-      {/* ── Breadcrumb ──────────────────────────────────────── */}
       <div className="new-project-breadcrumb">
         <Link to="/projects">Projetos</Link>
         <span>›</span>
@@ -64,7 +92,6 @@ export default function NewProjectPage() {
       <p className="new-project-subtitle">Configura o espaço de trabalho para as retrospectivas da tua equipa.</p>
 
       <form onSubmit={handleSubmit} className="new-project-form">
-        {/* ── Basic info ──────────────────────────────────── */}
         <div className="page-card new-project-section">
           <h2>Informação Básica</h2>
           <div className="form-field">
@@ -89,7 +116,6 @@ export default function NewProjectPage() {
           </div>
         </div>
 
-        {/* ── Team members ────────────────────────────────── */}
         <div className="page-card new-project-section">
           <h2>Membros da Equipa</h2>
           <div className="form-field">
@@ -101,77 +127,49 @@ export default function NewProjectPage() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Procurar por nome ou email..."
+                  placeholder="Procurar por email..."
                   value={memberSearch}
-                  onChange={e => setMemberSearch(e.target.value)}
+                  onChange={e => handleMemberSearch(e.target.value)}
                 />
               </div>
               {searchResults.length > 0 && (
                 <div className="member-search-dropdown">
-                  {searchResults.map(m => (
+                  {searchResults.map(u => (
                     <button
-                      key={m.id}
+                      key={u.userId}
                       type="button"
                       className="member-search-result"
-                      onClick={() => addMember(m)}
+                      onClick={() => addMember(u)}
                     >
-                      <span className="avatar avatar-sm" style={{ background: m.color }}>{m.initials}</span>
-                      {m.name}
+                      <span className="avatar avatar-sm" style={{ background: stringToColor(u.name) }}>
+                        {getInitials(u.name)}
+                      </span>
+                      <span>{u.name}</span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginLeft: 'auto' }}>{u.email}</span>
                     </button>
                   ))}
                 </div>
               )}
-              <button type="button" className="btn" onClick={() => {
-                const found = MOCK_MEMBERS.find(m =>
-                  !members.find(s => s.id === m.id) &&
-                  m.name.toLowerCase().includes(memberSearch.toLowerCase())
-                )
-                if (found) addMember(found)
-              }}>
-                Adicionar
-              </button>
             </div>
           </div>
 
           {members.length > 0 && (
             <div className="member-chips">
               {members.map(m => (
-                <div key={m.id} className="member-chip">
-                  <span className="avatar avatar-sm" style={{ background: m.color }}>{m.initials}</span>
+                <div key={m.userId} className="member-chip">
+                  <span className="avatar avatar-sm" style={{ background: stringToColor(m.name) }}>
+                    {getInitials(m.name)}
+                  </span>
                   <span>{m.name}</span>
-                  <button type="button" className="member-chip-remove" onClick={() => removeMember(m.id)}>×</button>
+                  <button type="button" className="member-chip-remove" onClick={() => removeMember(m.userId)}>×</button>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* ── Settings ────────────────────────────────────── */}
-        <div className="page-card new-project-section">
-          <h2>Configurações</h2>
-          <div className="new-project-settings-grid">
-            <div className="form-field">
-              <label>Data de Início</label>
-              <input
-                type="date"
-                name="startDate"
-                value={form.startDate}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-field">
-              <label>Estado Inicial</label>
-              <input
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-                placeholder="Ativo"
-              />
-            </div>
-          </div>
-        </div>
+        {error && <p className="error-msg">{error}</p>}
 
-        {/* ── Actions ─────────────────────────────────────── */}
         <div className="new-project-actions">
           <button type="button" className="btn" onClick={() => navigate('/projects')}>
             Cancelar

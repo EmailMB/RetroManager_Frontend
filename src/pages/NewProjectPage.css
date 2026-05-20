@@ -3,7 +3,7 @@
   max-width: 780px;
 }
 
-/* ── Breadcrumb ────────────────────────────────────────── */
+/* Breadcrumb */
 .new-project-breadcrumb {
   display: flex;
   align-items: center;
@@ -36,7 +36,7 @@
   margin-bottom: 28px;
 }
 
-/* ── Form ──────────────────────────────────────────────── */
+/* Form */
 .new-project-form {
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@
   min-height: 90px;
 }
 
-/* ── Member search ─────────────────────────────────────── */
+/* Member search */
 .member-search-row {
   display: flex;
   gap: 8px;
@@ -130,7 +130,7 @@
   background: var(--gray-bg);
 }
 
-/* ── Member chips ──────────────────────────────────────── */
+/* Member chips */
 .member-chips {
   display: flex;
   flex-wrap: wrap;
@@ -168,14 +168,14 @@
   color: var(--red);
 }
 
-/* ── Settings grid ─────────────────────────────────────── */
+/* Settings grid */
 .new-project-settings-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-/* ── Form actions ──────────────────────────────────────── */
+/* Form actions */
 .new-project-actions {
   display: flex;
   justify-content: flex-end;

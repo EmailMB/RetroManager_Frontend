@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { getProjectById } from '../data/mockData'
+import { getProjectById } from '../services/projectService'
 import './ProjectDetailPage.css'
 
 function formatDate(dateStr) {
@@ -10,58 +10,48 @@ function formatDate(dateStr) {
   })
 }
 
-function ActionsProgress({ resolved, total, allDone }) {
-  const pct = total > 0 ? (resolved / total) * 100 : 0
-  return (
-    <div className="retro-progress">
-      <span className={`retro-progress-label ${allDone ? 'done' : ''}`}>
-        {allDone ? 'Todas Concluídas' : 'Resolução de Ações'}
-      </span>
-      <div className="retro-progress-bar-wrap">
-        <div
-          className={`retro-progress-bar ${allDone ? 'done' : ''}`}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <span className="retro-progress-count">{resolved} / {total}</span>
-    </div>
-  )
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+}
+
+function stringToColor(str) {
+  const colors = ['#14b8a6','#f97316','#ec4899','#8b5cf6','#4f46e5','#ef4444','#22c55e','#0ea5e9','#a855f7']
+  let hash = 0
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash)
+  return colors[Math.abs(hash) % colors.length]
 }
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams()
   const navigate = useNavigate()
   const { isManager } = useAuth()
-  const [activeTab, setActiveTab] = useState('all')
 
-  const project = getProjectById(projectId)
+  const [project, setProject] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError]     = useState(null)
 
-  if (!project) {
-    return <div className="project-detail-not-found">Projeto não encontrado.</div>
-  }
+  useEffect(() => {
+    getProjectById(projectId)
+      .then(data => setProject(data))
+      .catch(() => setError('Projeto não encontrado.'))
+      .finally(() => setLoading(false))
+  }, [projectId])
 
-  const retros = activeTab === 'pending'
-    ? project.retrospectives.filter(r => r.pendingCount > 0)
-    : project.retrospectives
+  if (loading) return <div className="project-detail-page"><p>A carregar...</p></div>
+  if (error || !project) return <div className="project-detail-not-found">{error || 'Projeto não encontrado.'}</div>
 
   return (
     <div className="project-detail-page">
-      {/* ── Breadcrumb ─────────────────────────────────────── */}
       <div className="project-detail-breadcrumb">
         <Link to="/projects">Projetos</Link>
         <span className="breadcrumb-sep">›</span>
         <span>{project.name}</span>
       </div>
 
-      {/* ── Header ─────────────────────────────────────────── */}
       <div className="project-detail-header">
         <div className="project-detail-title-row">
           <h1>{project.name}</h1>
-          <span className={`badge ${project.status === 'Ativo' ? 'badge-green' : 'badge-gray'}`}>
-            {project.status}
-          </span>
           <div className="project-detail-header-actions">
-            {/* Settings button: only managers/admins */}
             {isManager && (
               <button
                 className="btn project-detail-settings-btn"
@@ -74,43 +64,41 @@ export default function ProjectDetailPage() {
                 </svg>
               </button>
             )}
-            {/* Only managers/admins can create retrospectives */}
-            {/* {isManager && ( */}
-            <button
-              className="btn-primary"
-              onClick={() => navigate(`/projects/${projectId}/retrospectives/new`)}
-            >
-              + Nova Retrospectiva
-            </button>
-            {/* )} */}
+            {isManager && (
+              <button
+                className="btn-primary"
+                onClick={() => navigate(`/projects/${projectId}/retrospectives/new`)}
+              >
+                + Nova Retrospectiva
+              </button>
+            )}
           </div>
         </div>
 
         <p className="project-detail-desc">{project.description}</p>
 
         <div className="project-detail-team">
-          <span className="project-detail-team-label">Equipa ({project.totalMembers}):</span>
+          <span className="project-detail-team-label">Equipa ({project.members.length}):</span>
           <div className="project-detail-members">
             {project.members.slice(0, 3).map(m => (
               <span
-                key={m.id}
+                key={m.userId}
                 className="avatar avatar-sm"
-                style={{ background: m.color }}
+                style={{ background: stringToColor(m.name) }}
                 title={m.name}
               >
-                {m.initials}
+                {getInitials(m.name)}
               </span>
             ))}
-            {project.totalMembers > 3 && (
+            {project.members.length > 3 && (
               <span className="project-detail-members-more">
-                +{project.totalMembers - 3}
+                +{project.members.length - 3}
               </span>
             )}
           </div>
         </div>
       </div>
 
-      {/* ── Stats ──────────────────────────────────────────── */}
       <div className="project-detail-stats">
         <div className="stat-card">
           <div className="stat-card-icon blue">
@@ -120,120 +108,58 @@ export default function ProjectDetailPage() {
           </div>
           <div>
             <span className="stat-card-label">Total de Sessões</span>
-            <span className="stat-card-value">{project.totalSessions}</span>
+            <span className="stat-card-value">{project.retrospectives.length}</span>
           </div>
         </div>
         <div className="stat-card">
           <div className="stat-card-icon purple">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
           </div>
           <div>
-            <span className="stat-card-label">Ações Geradas</span>
-            <span className="stat-card-value">{project.generatedActions}</span>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-card-icon green">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
-          <div>
-            <span className="stat-card-label">Ações Concluídas</span>
-            <span className="stat-card-value">{project.completedActions}</span>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-card-icon orange">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-            </svg>
-          </div>
-          <div>
-            <span className="stat-card-label">Ações Pendentes</span>
-            <span className="stat-card-value orange">{project.pendingActions}</span>
+            <span className="stat-card-label">Membros da Equipa</span>
+            <span className="stat-card-value">{project.members.length}</span>
           </div>
         </div>
       </div>
 
-      {/* ── Retrospective history ───────────────────────────── */}
       <div className="project-detail-history">
         <div className="project-detail-history-header">
           <h2>Histórico de Retrospectivas</h2>
-          <div className="project-detail-tabs">
-            <button
-              className={`project-detail-tab${activeTab === 'all' ? ' active' : ''}`}
-              onClick={() => setActiveTab('all')}
-            >
-              Todas
-            </button>
-            <button
-              className={`project-detail-tab${activeTab === 'pending' ? ' active' : ''}`}
-              onClick={() => setActiveTab('pending')}
-            >
-              Com Pendências
-            </button>
-          </div>
         </div>
 
-        {retros.length === 0 ? (
-          <p className="project-detail-empty">Sem retrospectivas nesta categoria.</p>
+        {project.retrospectives.length === 0 ? (
+          <p className="project-detail-empty">Sem retrospectivas neste projeto.</p>
         ) : (
           <div className="retro-list">
-            {retros.map((retro, i) => {
-              const allDone = retro.actionsResolved === retro.actionsTotal && retro.actionsTotal > 0
-              return (
-                <div key={retro.id} className="retro-list-item">
-                  <div className="retro-list-item-info">
-                    <div className="retro-list-item-title">
-                      <strong>{retro.title}</strong>
-                      {i === 0 && retro.status === 'Em curso' && (
-                        <span className="badge badge-blue retro-badge-recent">MAIS RECENTE</span>
-                      )}
-                    </div>
-                    <span className="retro-list-item-date">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                        <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" />
-                        <line x1="3" y1="10" x2="21" y2="10" />
-                      </svg>
-                      Realizada a {formatDate(retro.date)}
-                    </span>
+            {project.retrospectives.map(retro => (
+              <div key={retro.id} className="retro-list-item">
+                <div className="retro-list-item-info">
+                  <div className="retro-list-item-title">
+                    <strong>{retro.title}</strong>
                   </div>
-
-                  <div className="retro-list-item-counts">
-                    <span className="retro-count retro-count-positive">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3z" />
-                        <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-                      </svg>
-                      {retro.thumbsUp}
-                    </span>
-                    <span className="retro-count retro-count-pending">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-                      </svg>
-                      {retro.pendingCount}
-                    </span>
-                  </div>
-
-                  <ActionsProgress
-                    resolved={retro.actionsResolved}
-                    total={retro.actionsTotal}
-                    allDone={allDone}
-                  />
-
-                  <button
-                    className="btn retro-list-open-btn"
-                    onClick={() => navigate(`/retrospectives/${retro.id}`)}
-                  >
-                    Abrir Quadro
-                  </button>
+                  <span className="retro-list-item-date">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    {formatDate(retro.date)}
+                  </span>
                 </div>
-              )
-            })}
+
+                <button
+                  className="btn retro-list-open-btn"
+                  onClick={() => navigate(`/retrospectives/${retro.id}`)}
+                >
+                  Abrir Quadro
+                </button>
+              </div>
+            ))}
           </div>
         )}
       </div>

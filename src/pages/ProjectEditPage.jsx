@@ -1,27 +1,48 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { getProjectById, MOCK_MEMBERS } from '../data/mockData'
+import { getProjectById, updateProject, addProjectMember, removeProjectMember } from '../services/projectService'
+import { searchUsers } from '../services/userService'
 import './ProjectEditPage.css'
+
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+}
+
+function stringToColor(str) {
+  const colors = ['#14b8a6','#f97316','#ec4899','#8b5cf6','#4f46e5','#ef4444','#22c55e','#0ea5e9','#a855f7']
+  let hash = 0
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash)
+  return colors[Math.abs(hash) % colors.length]
+}
 
 export default function ProjectEditPage() {
   const { projectId } = useParams()
   const navigate = useNavigate()
   const { isManager } = useAuth()
 
-  const project = getProjectById(projectId)
+  const [project, setProject] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const [form, setForm] = useState({
-    name: project?.name ?? '',
-    description: project?.description ?? '',
-    status: project?.status ?? 'Ativo',
-  })
-  const [members, setMembers] = useState(project?.members ?? [])
+  const [form, setForm] = useState({ name: '', description: '' })
+  const [members, setMembers] = useState([])
   const [memberSearch, setMemberSearch] = useState('')
+  const [searchResults, setSearchResults] = useState([])
   const [submitting, setSubmitting] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [error, setError] = useState(null)
 
-  // Gate: only managers can edit (defensive — the button is also hidden)
+  useEffect(() => {
+    getProjectById(projectId)
+      .then(data => {
+        setProject(data)
+        setForm({ name: data.name, description: data.description ?? '' })
+        setMembers(data.members)
+      })
+      .catch(() => setError('Projeto não encontrado.'))
+      .finally(() => setLoading(false))
+  }, [projectId])
+
   if (!isManager) {
     return (
       <div className="project-edit-page">
@@ -30,56 +51,72 @@ export default function ProjectEditPage() {
     )
   }
 
-  if (!project) {
-    return <div className="project-edit-not-found">Projeto não encontrado.</div>
-  }
-
-  const searchResults = memberSearch.trim()
-    ? MOCK_MEMBERS.filter(m =>
-        !members.find(sel => sel.id === m.id) &&
-        m.name.toLowerCase().includes(memberSearch.toLowerCase())
-      )
-    : []
+  if (loading) return <div className="project-edit-page"><p>A carregar...</p></div>
+  if (error || !project) return <div className="project-edit-not-found">{error || 'Projeto não encontrado.'}</div>
 
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
     setSaved(false)
   }
 
-  function addMember(member) {
-    setMembers(prev => [...prev, member])
-    setMemberSearch('')
-    setSaved(false)
+  async function handleMemberSearch(query) {
+    setMemberSearch(query)
+    if (query.trim().length < 2) {
+      setSearchResults([])
+      return
+    }
+    try {
+      const results = await searchUsers(query.trim())
+      setSearchResults(results.filter(u => !members.find(m => m.userId === u.userId)))
+    } catch {
+      setSearchResults([])
+    }
   }
 
-  function removeMember(id) {
-    setMembers(prev => prev.filter(m => m.id !== id))
-    setSaved(false)
+  async function handleAddMember(user) {
+    try {
+      await addProjectMember(projectId, user.userId)
+      setMembers(prev => [...prev, user])
+      setMemberSearch('')
+      setSearchResults([])
+      setSaved(false)
+    } catch (err) {
+      if (err.response?.status === 409) {
+        setMembers(prev => [...prev, user])
+      }
+    }
   }
 
-  function handleSubmit(e) {
+  async function handleRemoveMember(userId) {
+    try {
+      await removeProjectMember(projectId, userId)
+      setMembers(prev => prev.filter(m => m.userId !== userId))
+      setSaved(false)
+    } catch {
+      setError('Erro ao remover membro.')
+    }
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault()
     setSubmitting(true)
-    // MOCK: simulate async save
-    setTimeout(() => {
-      setSubmitting(false)
+    setError(null)
+
+    try {
+      await updateProject(projectId, {
+        name: form.name,
+        description: form.description,
+      })
       setSaved(true)
-    }, 400)
-    // REAL: uncomment when backend is connected:
-    // try {
-    //   await api.put(`/projects/${projectId}`, {
-    //     name: form.name,
-    //     description: form.description,
-    //     memberIds: members.map(m => m.id),
-    //   })
-    //   setSaved(true)
-    // } catch { setError('Erro ao guardar alterações.') }
-    // finally { setSubmitting(false) }
+    } catch {
+      setError('Erro ao guardar alterações.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
     <div className="project-edit-page">
-      {/* ── Breadcrumb ──────────────────────────────────────── */}
       <div className="project-edit-breadcrumb">
         <Link to="/projects">Projetos</Link>
         <span className="breadcrumb-sep">›</span>
@@ -94,7 +131,6 @@ export default function ProjectEditPage() {
       </p>
 
       <form onSubmit={handleSubmit} className="project-edit-form">
-        {/* ── Basic info ──────────────────────────────────── */}
         <div className="page-card project-edit-section">
           <h2>Informação Básica</h2>
           <div className="form-field">
@@ -115,17 +151,8 @@ export default function ProjectEditPage() {
               rows={4}
             />
           </div>
-          <div className="form-field">
-            <label>Estado</label>
-            <select name="status" value={form.status} onChange={handleChange}>
-              <option value="Ativo">Ativo</option>
-              <option value="Concluído">Concluído</option>
-              <option value="Pausado">Pausado</option>
-            </select>
-          </div>
         </div>
 
-        {/* ── Team members ────────────────────────────────── */}
         <div className="page-card project-edit-section">
           <h2>Membros da Equipa ({members.length})</h2>
 
@@ -138,22 +165,25 @@ export default function ProjectEditPage() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Procurar por nome..."
+                  placeholder="Procurar por email..."
                   value={memberSearch}
-                  onChange={e => setMemberSearch(e.target.value)}
+                  onChange={e => handleMemberSearch(e.target.value)}
                 />
               </div>
               {searchResults.length > 0 && (
                 <div className="member-search-dropdown">
-                  {searchResults.map(m => (
+                  {searchResults.map(u => (
                     <button
-                      key={m.id}
+                      key={u.userId}
                       type="button"
                       className="member-search-result"
-                      onClick={() => addMember(m)}
+                      onClick={() => handleAddMember(u)}
                     >
-                      <span className="avatar avatar-sm" style={{ background: m.color }}>{m.initials}</span>
-                      {m.name}
+                      <span className="avatar avatar-sm" style={{ background: stringToColor(u.name) }}>
+                        {getInitials(u.name)}
+                      </span>
+                      <span>{u.name}</span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginLeft: 'auto' }}>{u.email}</span>
                     </button>
                   ))}
                 </div>
@@ -166,17 +196,17 @@ export default function ProjectEditPage() {
           ) : (
             <ul className="project-edit-member-list">
               {members.map(m => (
-                <li key={m.id} className="project-edit-member-row">
+                <li key={m.userId} className="project-edit-member-row">
                   <div className="project-edit-member-info">
-                    <span className="avatar avatar-sm" style={{ background: m.color }}>
-                      {m.initials}
+                    <span className="avatar avatar-sm" style={{ background: stringToColor(m.name) }}>
+                      {getInitials(m.name)}
                     </span>
                     <span className="project-edit-member-name">{m.name}</span>
                   </div>
                   <button
                     type="button"
                     className="project-edit-member-remove"
-                    onClick={() => removeMember(m.id)}
+                    onClick={() => handleRemoveMember(m.userId)}
                     title="Remover da equipa"
                   >
                     Remover
@@ -187,7 +217,8 @@ export default function ProjectEditPage() {
           )}
         </div>
 
-        {/* ── Actions ─────────────────────────────────────── */}
+        {error && <p className="error-msg">{error}</p>}
+
         <div className="project-edit-actions">
           {saved && <span className="project-edit-saved-msg">Alterações guardadas!</span>}
           <button

@@ -8,7 +8,7 @@
   color: var(--text-muted);
 }
 
-/* ── Breadcrumb ────────────────────────────────────────── */
+/* Breadcrumb */
 .project-detail-breadcrumb {
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@
   font-size: 1rem;
 }
 
-/* ── Header ────────────────────────────────────────────── */
+/* Header */
 .project-detail-header {
   margin-bottom: 28px;
 }
@@ -109,7 +109,7 @@
   margin-left: 10px;
 }
 
-/* ── Stats ─────────────────────────────────────────────── */
+/* Stats */
 .project-detail-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -162,7 +162,7 @@
 
 .stat-card-value.orange { color: var(--orange); }
 
-/* ── History ───────────────────────────────────────────── */
+/* History */
 .project-detail-history {
   background: var(--white);
   border: 1px solid var(--border);
@@ -215,7 +215,7 @@
   padding: 20px 0;
 }
 
-/* ── Retro list ────────────────────────────────────────── */
+/* Retro list */
 .retro-list {
   display: flex;
   flex-direction: column;
@@ -275,10 +275,9 @@
   font-weight: 600;
 }
 
-.retro-count-positive { color: var(--green); }
 .retro-count-pending  { color: var(--orange); }
 
-/* ── Progress bar ──────────────────────────────────────── */
+/* Progress bar */
 .retro-progress {
   display: flex;
   flex-direction: column;
