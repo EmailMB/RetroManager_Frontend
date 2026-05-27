@@ -12,14 +12,15 @@ import './TemplatesPage.css'
 const PRESET_COLORS = ['#22c55e','#f97316','#3b82f6','#a855f7','#ec4899','#06b6d4','#f59e0b','#ef4444']
 
 export default function TemplatesPage() {
-  const { isAdmin } = useAuth()
+  const { isManager, isAdmin } = useAuth()
   const [templates, setTemplates] = useState([])
   const [loading, setLoading]     = useState(true)
   const [editing, setEditing]     = useState(null) // null | template object | 'new'
 
   useEffect(() => {
-    refresh()
-  }, [])
+    if (isManager) refresh()
+    else setLoading(false)
+  }, [isManager])
 
   function refresh() {
     setLoading(true)
@@ -45,6 +46,7 @@ export default function TemplatesPage() {
     refresh()
   }
 
+  if (!isManager) return <div className="templates-page"><p>Acesso restrito a gestores.</p></div>
   if (loading) return <div className="templates-page"><p>A carregar...</p></div>
 
   return (

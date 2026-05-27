@@ -44,7 +44,10 @@ function IconTemplates() {
 const NAV_ITEMS = [
   { to: '/overview',  label: 'Visão Geral', Icon: IconOverview },
   { to: '/projects',  label: 'Projetos',     Icon: IconProjects },
-  { to: '/templates', label: 'Templates',    Icon: IconTemplates },
+]
+
+const MANAGER_NAV_ITEMS = [
+  { to: '/templates', label: 'Templates', Icon: IconTemplates },
 ]
 
 const ADMIN_NAV_ITEMS = [
@@ -63,7 +66,7 @@ function stringToColor(str) {
 }
 
 export default function Sidebar() {
-  const { user, logout, isAdmin } = useAuth()
+  const { user, logout, isManager, isAdmin } = useAuth()
   const navigate = useNavigate()
 
   function handleLogout() {
@@ -80,6 +83,17 @@ export default function Sidebar() {
 
       <nav className="sidebar-nav">
         {NAV_ITEMS.map(({ to, label, Icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) => `sidebar-nav-item${isActive ? ' active' : ''}`}
+          >
+            <Icon />
+            <span>{label}</span>
+          </NavLink>
+        ))}
+
+        {isManager && MANAGER_NAV_ITEMS.map(({ to, label, Icon }) => (
           <NavLink
             key={to}
             to={to}
