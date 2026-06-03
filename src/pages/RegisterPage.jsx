@@ -32,15 +32,20 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      const result = await registerService(form.name, form.email, form.password)
-      if (result?.emailVerified) {
-        navigate('/login')
-      } else {
-        setSuccess(true)
-      }
+      await registerService(form.name, form.email, form.password)
+      setSuccess(true)
     } catch (err) {
-      const msg = err.response?.data ?? 'Erro ao criar conta. Tenta novamente.'
-      setError(typeof msg === 'string' ? msg : 'Erro ao criar conta. Tenta novamente.')
+      const data = err.response?.data
+      let msg = 'Erro ao criar conta. Tenta novamente.'
+      if (typeof data === 'string') {
+        msg = data
+      } else if (data?.errors) {
+        const firstField = Object.values(data.errors)[0]
+        if (Array.isArray(firstField) && firstField.length > 0) msg = firstField[0]
+      } else if (data?.title) {
+        msg = data.title
+      }
+      setError(msg)
     } finally {
       setLoading(false)
     }
